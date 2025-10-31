@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -12,12 +12,29 @@ import Icon from '@/components/ui/icon';
 
 const Index = () => {
   const [selectedCheat, setSelectedCheat] = useState<string | null>(null);
+  const [onlineUsers, setOnlineUsers] = useState(0);
   const [chatMessages, setChatMessages] = useState<Array<{text: string, isUser: boolean}>>([
     { text: 'Привет! Я AI-ассистент LebroDLC. Чем могу помочь? 🎮', isUser: false }
   ]);
   const [messageInput, setMessageInput] = useState('');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
+
+  useEffect(() => {
+    const baseOnline = 147;
+    const randomOnline = Math.floor(Math.random() * 30) + baseOnline;
+    setOnlineUsers(randomOnline);
+
+    const interval = setInterval(() => {
+      setOnlineUsers(prev => {
+        const change = Math.random() > 0.5 ? 1 : -1;
+        const newValue = prev + change;
+        return Math.max(baseOnline - 10, Math.min(baseOnline + 40, newValue));
+      });
+    }, 8000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   const notifyTelegram = async (message: string) => {
     try {
@@ -209,10 +226,16 @@ const Index = () => {
       <header className="border-b border-border sticky top-0 bg-background/98 backdrop-blur-md z-50 shadow-sm">
         <div className="container mx-auto px-4 py-4">
           <div className="flex justify-between items-center">
-            <button onClick={() => window.location.reload()} className="flex items-center gap-3 hover:opacity-80 transition-opacity">
-              <Icon name="Shield" className="text-primary" size={36} />
-              <h1 className="text-2xl md:text-3xl font-bold text-primary">LebroDLC</h1>
-            </button>
+            <div className="flex items-center gap-4">
+              <button onClick={() => window.location.reload()} className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+                <Icon name="Shield" className="text-primary" size={36} />
+                <h1 className="text-2xl md:text-3xl font-bold text-primary">LebroDLC</h1>
+              </button>
+              <Badge variant="outline" className="gap-2 hidden md:flex">
+                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+                <span className="text-xs">{onlineUsers} онлайн</span>
+              </Badge>
+            </div>
 
             <nav className="hidden md:flex items-center gap-6">
               <button onClick={() => scrollToSection('products')} className="text-foreground hover:text-primary transition-colors font-medium">
@@ -303,17 +326,29 @@ const Index = () => {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(34,197,94,0.1),transparent_50%)]" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_50%,rgba(249,115,22,0.08),transparent_50%)]" />
         <div className="container mx-auto text-center relative z-10 max-w-6xl">
-          <Badge className="mb-6 bg-secondary text-secondary-foreground hover:bg-secondary/90 text-sm px-6 py-2">
-            🔥 Лучшие читы 2025
-          </Badge>
+          <div className="flex items-center justify-center gap-3 mb-6">
+            <Badge className="bg-secondary text-secondary-foreground hover:bg-secondary/90 text-sm px-6 py-2">
+              🔥 Лучшие читы 2025
+            </Badge>
+            <Badge variant="outline" className="gap-2 md:hidden">
+              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+              <span className="text-xs">{onlineUsers} онлайн</span>
+            </Badge>
+          </div>
           <h2 className="text-6xl md:text-8xl font-bold mb-8 tracking-tight leading-tight">
             <span className="text-primary">LebroDLC</span>
             <br />
             ЧИТЫ ДЛЯ OXIDE
           </h2>
-          <p className="text-lg md:text-xl text-muted-foreground mb-10 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-lg md:text-xl text-muted-foreground mb-6 max-w-3xl mx-auto leading-relaxed">
             Премиум читы для Oxide Survival Island с полным функционалом. Моментальная активация. Гарантия возврата.
           </p>
+          <div className="inline-flex items-center gap-3 bg-primary/10 border border-primary/30 rounded-full px-6 py-3 mb-10">
+            <Icon name="Users" size={20} className="text-primary" />
+            <p className="text-base font-semibold">
+              <span className="text-primary">4 300+</span> человек уже с нами! Станьте одним из них!
+            </p>
+          </div>
           <div className="flex gap-4 justify-center flex-wrap">
             <Button size="lg" className="gap-2 text-lg px-10 h-14" onClick={() => scrollToSection('products')}>
               <Icon name="ShoppingCart" size={22} />
