@@ -9,10 +9,12 @@ import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Label } from '@/components/ui/label';
 import Icon from '@/components/ui/icon';
+import PurchaseNotifications from '@/components/PurchaseNotifications';
 
 const Index = () => {
   const [selectedCheat, setSelectedCheat] = useState<string | null>(null);
   const [onlineUsers, setOnlineUsers] = useState(0);
+  const [sessionId] = useState(() => `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`);
   const [chatMessages, setChatMessages] = useState<Array<{text: string, isUser: boolean}>>([
     { text: 'Привет! Я AI-ассистент LebroDLC. Чем могу помочь? 🎮', isUser: false }
   ]);
@@ -223,6 +225,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <PurchaseNotifications />
       <header className="border-b border-border sticky top-0 bg-background/98 backdrop-blur-md z-50 shadow-sm">
         <div className="container mx-auto px-4 py-4">
           <div className="flex justify-between items-center">
