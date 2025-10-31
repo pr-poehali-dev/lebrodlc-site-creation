@@ -19,45 +19,70 @@ const Index = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
 
+  const notifyTelegram = async (message: string) => {
+    try {
+      await fetch('https://functions.poehali.dev/a1a7db65-b443-410f-8fda-aefd4dda6056', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message })
+      });
+    } catch (error) {
+      console.log('Telegram notification failed:', error);
+    }
+  };
+
   const getAIResponse = (userMessage: string): string => {
     const msg = userMessage.toLowerCase();
     
+    if (msg.includes('привет') || msg.includes('здравствуй') || msg.includes('hello') || msg.includes('hi')) {
+      return 'Привет! 👋 Я AI-помощник LebroDLC.\n\nЯ помогу тебе:\n✅ Узнать цены\n✅ Выбрать тариф\n✅ Оплатить покупку\n✅ Получить поддержку\n\nЗадавай любые вопросы! 🎮';
+    }
+    if (msg.includes('кто ты') || msg.includes('что ты') || msg.includes('who are you')) {
+      return 'Я — AI-ассистент магазина читов LebroDLC! 🤖\n\nПомогаю покупателям с:\n• Выбором тарифов\n• Оплатой\n• Установкой\n• Любыми вопросами\n\nСпрашивай что угодно!';
+    }
     if (msg.includes('цена') || msg.includes('стоимость') || msg.includes('сколько')) {
-      return 'У нас 3 тарифа:\n• 1 день - 100₽\n• 7 дней - 320₽\n• 30 дней - 800₽\n\nВсе тарифы включают полный функционал! 🔥';
+      return 'У нас 3 тарифа:\n💎 1 день - 100₽\n💎 7 дней - 320₽ (Выгодно!)\n💎 30 дней - 800₽ (Хит!)\n\nВсе тарифы = полный функционал! 🔥';
     }
-    if (msg.includes('функци') || msg.includes('возможности') || msg.includes('что умеет')) {
-      return 'LebroDLC включает:\n✅ ESP\n✅ Aim bot\n✅ Aimkill\n✅ Magic bullet\n✅ Нет отдачи\n✅ Fast reload\n✅ Kick\n✅ Бессмертные инструменты\n✅ Auto farm';
+    if (msg.includes('функци') || msg.includes('возможности') || msg.includes('что умеет') || msg.includes('что может')) {
+      return 'LebroDLC включает:\n✅ ESP (видеть всех)\n✅ Aim bot (авто-прицел)\n✅ Aimkill (мгновенный убийство)\n✅ Magic bullet (пули без промаха)\n✅ Нет отдачи\n✅ Fast reload (быстрая перезарядка)\n✅ Kick (кик игроков)\n✅ Бессмертные инструменты\n✅ Auto farm (авто-фарм)';
     }
-    if (msg.includes('оплат') || msg.includes('купить') || msg.includes('заказать')) {
-      return 'Оплата через СБП на номер:\n+7 918 726-50-53\n\nПосле оплаты пришлите чек в поддержку @Zirys для активации! 💳';
+    if (msg.includes('оплат') || msg.includes('купить') || msg.includes('заказать') || msg.includes('pay')) {
+      return 'Оплата через СБП! 💳\n\n📱 Номер: +7 918 726-50-53\n\nШаги:\n1. Откройте банк\n2. СБП → этот номер\n3. Отправьте сумму\n4. Пришлите чек @Zirys\n\nАктивация мгновенная!';
     }
-    if (msg.includes('доставка') || msg.includes('получить') || msg.includes('скачать')) {
-      return 'После оплаты вы сразу получаете:\n📥 Ссылку на скачивание\n📝 Инструкцию по установке\n🔑 Ключ активации\n\nВсё в Telegram!';
+    if (msg.includes('доставка') || msg.includes('получить') || msg.includes('скачать') || msg.includes('download')) {
+      return 'После оплаты получите:\n📥 Ссылку на скачивание\n📝 Инструкцию установки\n🔑 Ключ активации\n\nВсё в Telegram @Zirys!\nАктивация за 5 минут!';
     }
-    if (msg.includes('гарантия') || msg.includes('возврат') || msg.includes('не работает')) {
-      return 'Даём 100% гарантию!\n✅ Возврат денег в течение 24 часов\n✅ Поддержка при установке\n✅ Обновления бесплатно';
+    if (msg.includes('гарантия') || msg.includes('возврат') || msg.includes('не работает') || msg.includes('refund')) {
+      return 'Даём 100% гарантию! 🛡\n\n✅ Возврат за 24 часа\n✅ Помощь при установке\n✅ Обновления бесплатно\n✅ Техподдержка 24/7\n\nВаша безопасность — наш приоритет!';
     }
-    if (msg.includes('безопасн') || msg.includes('бан') || msg.includes('обнаруж')) {
-      return 'Используем современные методы защиты от античитов. Но помните - 100% гарантии безопасности никто не даст. Используйте на свой риск! ⚠️';
+    if (msg.includes('безопасн') || msg.includes('бан') || msg.includes('обнаруж') || msg.includes('safe')) {
+      return 'Защита от античитов! 🔒\n\nИспользуем современные методы, НО:\n⚠️ 100% гарантии нет никогда\n⚠️ Риск бана существует\n⚠️ Используйте на свой страх\n\nБудьте осторожны!';
     }
-    if (msg.includes('как установить') || msg.includes('установка') || msg.includes('настройка')) {
-      return 'После покупки вы получите подробную инструкцию! Если что-то непонятно - наша поддержка поможет с установкой 24/7! 🛠';
+    if (msg.includes('как установить') || msg.includes('установка') || msg.includes('настройка') || msg.includes('install')) {
+      return 'Установка проста! 🛠\n\n1. Скачаете файл\n2. Запустите установщик\n3. Следуйте инструкции\n\nЕсли не получится — наша поддержка поможет 24/7!\n📱 @Zirys';
     }
-    if (msg.includes('поддержка') || msg.includes('помощь') || msg.includes('оператор')) {
-      return 'Для связи с живой поддержкой напишите:\n📱 Telegram: @Zirys\n\nОтветим в течение часа! 🚀';
+    if (msg.includes('поддержка') || msg.includes('помощь') || msg.includes('оператор') || msg.includes('support')) {
+      return 'Нужна помощь человека? 👨‍💻\n\nСвяжитесь с нами:\n📱 Telegram: @Zirys\n\nОтветим за час!\nРаботаем 24/7! 🚀';
+    }
+    if (msg.includes('спасибо') || msg.includes('thanks') || msg.includes('thank')) {
+      return 'Пожалуйста! 😊\nРад помочь!\n\nЕсли еще вопросы — пиши! 💬';
     }
     
-    return 'Извините, не совсем понял ваш вопрос 😅\n\nДля подробной консультации свяжитесь с нашей поддержкой:\n📱 @Zirys в Telegram\n\nОператор ответит быстро!';
+    return 'Не совсем понял 🤔\n\nМогу рассказать про:\n💰 Цены и тарифы\n🎮 Функции читов\n💳 Способы оплаты\n🛡 Гарантии\n\nИли напишите живому оператору:\n📱 @Zirys в Telegram';
   };
 
   const sendMessage = () => {
     if (messageInput.trim()) {
       const userMsg = messageInput;
       setChatMessages([...chatMessages, { text: userMsg, isUser: true }]);
+      
+      notifyTelegram(`💬 Новое сообщение в чате:\n\nПользователь: ${userMsg}`);
+      
+      const newInput = messageInput;
       setMessageInput('');
       
       setTimeout(() => {
-        const aiResponse = getAIResponse(userMsg);
+        const aiResponse = getAIResponse(newInput);
         setChatMessages(prev => [...prev, {
           text: aiResponse,
           isUser: false
@@ -67,11 +92,19 @@ const Index = () => {
   };
 
   const scrollToSection = (id: string) => {
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      setMobileMenuOpen(false);
-    }
+    setMobileMenuOpen(false);
+    setTimeout(() => {
+      const element = document.getElementById(id);
+      if (element) {
+        const headerOffset = 80;
+        const elementPosition = element.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
+      }
+    }, 100);
   };
 
   const cheats = [
@@ -156,7 +189,12 @@ const Index = () => {
           placeholder="Введите сообщение..."
           value={messageInput}
           onChange={(e) => setMessageInput(e.target.value)}
-          onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              sendMessage();
+            }
+          }}
           className="flex-1"
         />
         <Button onClick={sendMessage} size="icon">
@@ -171,10 +209,10 @@ const Index = () => {
       <header className="border-b border-border sticky top-0 bg-background/98 backdrop-blur-md z-50 shadow-sm">
         <div className="container mx-auto px-4 py-4">
           <div className="flex justify-between items-center">
-            <div className="flex items-center gap-3">
+            <button onClick={() => window.location.reload()} className="flex items-center gap-3 hover:opacity-80 transition-opacity">
               <Icon name="Shield" className="text-primary" size={36} />
               <h1 className="text-2xl md:text-3xl font-bold text-primary">LebroDLC</h1>
-            </div>
+            </button>
 
             <nav className="hidden md:flex items-center gap-6">
               <button onClick={() => scrollToSection('products')} className="text-foreground hover:text-primary transition-colors font-medium">
@@ -276,7 +314,7 @@ const Index = () => {
           <p className="text-lg md:text-xl text-muted-foreground mb-10 max-w-3xl mx-auto leading-relaxed">
             Премиум читы для Oxide Survival Island с полным функционалом. Моментальная активация. Гарантия возврата.
           </p>
-          <div className="flex gap-4 justify-center flex-wrap mb-12">
+          <div className="flex gap-4 justify-center flex-wrap">
             <Button size="lg" className="gap-2 text-lg px-10 h-14" onClick={() => scrollToSection('products')}>
               <Icon name="ShoppingCart" size={22} />
               Купить чит
@@ -301,14 +339,6 @@ const Index = () => {
                 <ChatSupport />
               </SheetContent>
             </Sheet>
-          </div>
-
-          <div className="max-w-4xl mx-auto">
-            <img 
-              src="https://cdn.poehali.dev/files/a41a5ab1-396f-44f3-ad75-2ce448574967.jpg" 
-              alt="LebroDLC в действии" 
-              className="rounded-2xl shadow-2xl border-2 border-primary/20 w-full hover:scale-[1.02] transition-transform duration-300"
-            />
           </div>
         </div>
       </section>
@@ -339,7 +369,15 @@ const Index = () => {
           <div className="text-center mb-16">
             <Badge className="mb-4 bg-secondary/10 text-secondary border-secondary/20">Выгодные тарифы</Badge>
             <h3 className="text-4xl md:text-5xl font-bold mb-4">Тарифы LebroDLC</h3>
-            <p className="text-muted-foreground text-lg">Выберите подходящий период подписки</p>
+            <p className="text-muted-foreground text-lg mb-10">Выберите подходящий период подписки</p>
+            <div className="max-w-5xl mx-auto mb-12">
+              <img 
+                src="https://cdn.poehali.dev/files/a41a5ab1-396f-44f3-ad75-2ce448574967.jpg" 
+                alt="LebroDLC в действии" 
+                className="rounded-3xl shadow-2xl border-4 border-primary/30 w-full hover:scale-[1.02] hover:shadow-primary/20 transition-all duration-300"
+              />
+              <p className="text-sm text-muted-foreground mt-4">👆 Вот так выглядит LebroDLC в игре Oxide Survival Island</p>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
